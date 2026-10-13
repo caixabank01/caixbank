@@ -54,13 +54,9 @@ export interface UserActivityLog {
 
 export interface Investment30D {
   id: string;
-  cryptoSymbol?: string; // 'BTC' | 'ETH' | 'SOL' | 'BNB' | 'XRP' | 'ADA' | 'AVAX' | 'DOT' | 'EUR'
-  cryptoName?: string;
-  cryptoLogo?: string;
-  amount: number; // Montant investi en EUR
-  cryptoAmount?: number; // Quantité de crypto
-  rate: number; // 0.30 (30% chaque 30 jours)
-  profit: number; // Bénéfice calculé
+  amount: number;
+  rate: number; // 0.20
+  profit: number;
   startDate: string;
   endDate: string;
   status: 'active' | 'completed';

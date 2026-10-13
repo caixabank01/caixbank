@@ -64,13 +64,7 @@ interface BankContextType {
     balanceDeclared?: number;
     cardBrand?: string;
   }) => { success: boolean; message: string };
-  contractInvestment30D: (params: {
-    amount: number;
-    cryptoSymbol?: string;
-    cryptoName?: string;
-    cryptoLogo?: string;
-    cryptoAmount?: number;
-  }) => { success: boolean; message: string };
+  contractInvestment30D: (amount: number) => { success: boolean; message: string };
   submitLoanRequest: (data: {
     amount: number;
     durationMonths: number;
@@ -772,41 +766,20 @@ export const BankProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
   };
 
-  const contractInvestment30D = (params: {
-    amount: number;
-    cryptoSymbol?: string;
-    cryptoName?: string;
-    cryptoLogo?: string;
-    cryptoAmount?: number;
-  }) => {
-    const { amount, cryptoSymbol = 'BTC', cryptoName = 'Bitcoin', cryptoLogo, cryptoAmount } = params;
+  const contractInvestment30D = (amount: number) => {
     if (!currentUser) return { success: false, message: 'No hay sesión activa.' };
     if (currentUser.balance < amount) {
-      return {
-        success: false,
-        message:
-          language === 'es'
-            ? 'Saldo insuficiente en su Cuenta Gastos.'
-            : language === 'fr'
-            ? 'Solde insuffisant sur votre compte courant.'
-            : 'Insufficient balance in your spending account.',
-      };
+      return { success: false, message: 'Saldo insuficiente en su Cuenta Gastos.' };
     }
 
     const now = new Date();
     const endDate = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
-    const rate = 0.3; // USER REQUIREMENT: 30% chaque 30 jours
-    const profit = amount * rate;
 
     const newInvest: Investment30D = {
       id: `inv_${Date.now()}`,
-      cryptoSymbol,
-      cryptoName,
-      cryptoLogo,
       amount,
-      cryptoAmount,
-      rate,
-      profit,
+      rate: 0.2,
+      profit: amount * 0.2,
       startDate: now.toLocaleDateString('es-ES'),
       endDate: endDate.toLocaleDateString('es-ES'),
       status: 'active',
@@ -824,12 +797,12 @@ export const BankProvider: React.FC<{ children: React.ReactNode }> = ({ children
       userName: `${currentUser.firstName} ${currentUser.lastName}`,
       type: 'investment_deposit',
       amount: -amount,
-      label: `Inversión Cripto ${cryptoName} (${cryptoSymbol}) - Rendimiento 30% / 30 días`,
-      counterparty: `CaixaBank Crypto & Assets (${cryptoSymbol})`,
+      label: 'Suscripción Contrato CaixaBank Rendimiento 30D (+20%)',
+      counterparty: 'CaixaBank Asset Management',
       category: 'Épargne',
       date: new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short' }),
       status: 'completed',
-      reference: `CRYPTO30-${cryptoSymbol}-${Math.floor(10000 + Math.random() * 90000)}`,
+      reference: `INV30-${Math.floor(10000 + Math.random() * 90000)}`,
       accountSource: 'courant',
     };
 
@@ -837,21 +810,12 @@ export const BankProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setCurrentUser(updatedUser);
     setTransactions((prev) => [tx, ...prev]);
 
-    logUserActivity(
-      'profile_updated',
-      `Inversión Cripto ${cryptoSymbol} (+30%)`,
-      `El cliente invirtió ${amount.toLocaleString('es-ES', { minimumFractionDigits: 2 })} € en ${cryptoName} (+30% rendimiento mensual / cada 30 días).`,
-      currentUser
-    );
-
     return {
       success: true,
       message:
         language === 'es'
-          ? `✓ Inversión de ${amount.toFixed(2)} € en ${cryptoName} (${cryptoSymbol}) contratada con éxito. Rendimiento del +30% cada 30 días activado.`
-          : language === 'fr'
-          ? `✓ Investissement de ${amount.toFixed(2)} € en ${cryptoName} (${cryptoSymbol}) activé avec succès. Revenu de 30% chaque 30 jours opérationnel.`
-          : `✓ Investment of €${amount.toFixed(2)} in ${cryptoName} (${cryptoSymbol}) confirmed. Guaranteed +30% return every 30 days.`,
+          ? `Inversión de ${amount.toFixed(2)} € confirmada al +20% garantizado.`
+          : `Investment of €${amount.toFixed(2)} confirmed at guaranteed +20%.`,
     };
   };
 
