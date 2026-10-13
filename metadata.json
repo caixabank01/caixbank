@@ -1,0 +1,6 @@
+{
+  "name": "AURA Banque Privée & Numérique",
+  "description": "Plateforme bancaire moderne avec authentification sécurisée, inscription, espace client complet et console d'administration bancaire.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
