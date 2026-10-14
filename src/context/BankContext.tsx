@@ -12,6 +12,7 @@ import {
   UserActivityLog,
 } from '../types/bank';
 import { Language, Translations, translations } from '../i18n/translations';
+import bankAdminAvatar from '../assets/images/bank_admin_avatar_1791816158654.jpg';
 
 interface BankContextType {
   language: Language;
@@ -107,6 +108,7 @@ interface BankContextType {
     address?: string;
   }) => { success: boolean; message: string };
   sendSupportMessage: (subject: string, content: string) => void;
+  markNotificationsAsReadForUser: (userId: string) => void;
   resetToDefaultData: () => void;
 }
 
@@ -196,7 +198,7 @@ const INITIAL_USERS: BankUser[] = [
     address: 'Dirección Central CaixaBank, Paseo de la Castellana 51, Madrid',
     password: '34343434',
     createdAt: '01/01/2024',
-    avatarUrl: '/src/assets/images/bank_admin_avatar_1791816158654.jpg',
+    avatarUrl: bankAdminAvatar,
   },
 ];
 
@@ -1351,6 +1353,12 @@ export const BankProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setSupportMessages((prev) => [newMsg, ...prev]);
   };
 
+  const markNotificationsAsReadForUser = (userId: string) => {
+    setSupportMessages((prev) =>
+      prev.map((m) => (m.userId === userId ? { ...m, isReadByUser: true } : m))
+    );
+  };
+
   const resetToDefaultData = () => {
     localStorage.removeItem(STORAGE_KEY_USERS);
     localStorage.removeItem(STORAGE_KEY_TXS);
@@ -1407,6 +1415,7 @@ export const BankProvider: React.FC<{ children: React.ReactNode }> = ({ children
         adminReplySupport,
         adminCreateUser,
         sendSupportMessage,
+        markNotificationsAsReadForUser,
         resetToDefaultData,
       }}
     >

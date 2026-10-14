@@ -2135,7 +2135,65 @@ export const AdminSpace: React.FC = () => {
                 </div>
               )}
 
-              {/* 5. Operaciones & Transferencias del Cliente */}
+              {/* 5. Cartera Cripto & Inversiones 30% del Cliente */}
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+                <div className="font-black text-amber-700 uppercase text-[10px] tracking-wider flex items-center justify-between">
+                  <span className="flex items-center gap-1.5">
+                    <TrendingUp className="w-3.5 h-3.5 text-amber-600" />
+                    Cartera Criptomonedas (+30% / 30 Días) del Cliente
+                  </span>
+                  <span className="text-[10px] text-slate-500 font-mono font-bold">
+                    {(detailClient.investments || []).length} contratos activos
+                  </span>
+                </div>
+                {(!detailClient.investments || detailClient.investments.length === 0) ? (
+                  <div className="p-3 bg-white rounded-xl border border-slate-200 text-slate-400 text-center text-xs">
+                    El cliente no dispone de contratos cripto activos en este momento.
+                  </div>
+                ) : (
+                  <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                    {detailClient.investments.map((inv) => (
+                      <div
+                        key={inv.id}
+                        className="p-3 bg-white rounded-xl border border-slate-200 flex items-center justify-between text-xs"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          {inv.cryptoLogo ? (
+                            <img
+                              src={inv.cryptoLogo}
+                              alt={inv.cryptoSymbol || 'BTC'}
+                              className="w-7 h-7 rounded-full object-contain p-0.5 border border-slate-100 bg-white"
+                            />
+                          ) : (
+                            <div className="w-7 h-7 rounded-full bg-amber-100 text-amber-800 font-bold flex items-center justify-center text-[10px]">
+                              {inv.cryptoSymbol || 'BTC'}
+                            </div>
+                          )}
+                          <div>
+                            <div className="font-black text-slate-900">
+                              {inv.cryptoName || 'Bitcoin'} ({inv.cryptoSymbol || 'BTC'})
+                            </div>
+                            <div className="text-[10px] text-slate-400">
+                              Ciclo: {inv.startDate} → <strong>{inv.endDate}</strong>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="text-right">
+                          <div className="font-mono font-bold text-slate-900">
+                            {inv.amount.toLocaleString('es-ES', { minimumFractionDigits: 2 })} €
+                          </div>
+                          <div className="font-mono font-black text-emerald-600 text-[11px]">
+                            +{inv.profit.toLocaleString('es-ES', { minimumFractionDigits: 2 })} € (+30%)
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* 6. Operaciones & Transferencias del Cliente */}
               <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
                 <div className="font-black text-slate-800 uppercase text-[10px] tracking-wider flex items-center justify-between">
                   <span className="flex items-center gap-1.5">

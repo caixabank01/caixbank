@@ -148,6 +148,7 @@ export interface SupportMessage {
   content: string;
   date: string;
   isReadByAdmin: boolean;
+  isReadByUser?: boolean;
   adminReply?: string;
   repliedAt?: string;
 }

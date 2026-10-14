@@ -13,6 +13,7 @@ import {
   ShieldCheck,
   Building
 } from 'lucide-react';
+import caixabankLogo from '../../assets/images/caixabank_logo_white_1791832638118.jpg';
 
 interface AuthPageProps {
   initialMode?: 'login' | 'register';
@@ -130,7 +131,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ initialMode = 'login' }) => 
           {/* OFFICIAL CAIXABANK LOGO IMAGE (PURE WHITE HEADQUARTERS EMBLEM) */}
           <div className="relative rounded-3xl overflow-hidden border border-slate-200 shadow-xl bg-white mb-8 max-w-lg group">
             <img
-              src="/src/assets/images/caixabank_logo_white_1791832638118.jpg"
+              src={caixabankLogo}
               alt="Logo oficial CaixaBank"
               className="w-full h-64 sm:h-72 object-cover object-center transition-transform duration-700 group-hover:scale-102"
               referrerPolicy="no-referrer"
